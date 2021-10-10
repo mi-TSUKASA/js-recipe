@@ -13,6 +13,9 @@
       <button id="add-button-100">
         100円入れる
       </button>
+      <button id="change">
+        おつり
+      </button>
       <h4>↓財布↓</h4>
       <div id="display-saifu">1000</div>
       <h4>↓投入金額↓</h4>
@@ -20,7 +23,8 @@
     </section>
     <section>
       <h3>商品を買う</h3>
-      <button id="buy-button-tea">お茶(100円)</button>
+      <button id="buy-button-tea" disabled>お茶(100円)</button>
+      <button id="buy-button-beer" disabled>お酒(150円)</button>
     </section>
     <section>
       <h3>買った商品</h3>
@@ -29,22 +33,47 @@
     <script>
       // HTML要素を取得する
       const buyButtonTea = document.getElementById("buy-button-tea")
+      const buyButtonBeer = document.getElementById("buy-button-beer")
       const displayItems = document.getElementById("display-items")
       const addButton = document.getElementById("add-button-100")
       const displaySaifu = document.getElementById("display-saifu")
       const displayJihankiMoney = document.getElementById(
         "display-jihanki-money",
       )
+      const changeButton = document.getElementById("change")
 
       let saifu = 1000
       let jihankiMoney = 0
 
+      const disabled = function() {
+        if (100 <= jihankiMoney) {
+          buyButtonTea.disabled = false
+          if (150 <= jihankiMoney) {
+            buyButtonBeer.disabled = false
+          }
+        } else {
+          buyButtonTea.disabled = true
+          buyButtonBeer.disabled = true
+        }
+      }
+
       buyButtonTea.onclick = function() {
-        displayItems.textContent += "🍵"
-        displaySaifu.textContent = saifu
-        displayJihankiMoney.textContent = jihankiMoney
         if (jihankiMoney >= 100) {
           jihankiMoney -= 100
+          displayItems.textContent += "🍵"
+          displaySaifu.textContent = saifu
+          displayJihankiMoney.textContent = jihankiMoney
+          disabled()
+        }
+      }
+
+      buyButtonBeer.onclick = function() {
+        if (jihankiMoney >= 150) {
+          jihankiMoney -= 150
+          displayItems.textContent += "🍺"
+          displaySaifu.textContent = saifu
+          displayJihankiMoney.textContent = jihankiMoney
+          disabled()
         }
       }
 
@@ -55,6 +84,15 @@
         }
         displaySaifu.textContent = saifu
         displayJihankiMoney.textContent = jihankiMoney
+        disabled()
+      }
+
+      changeButton.onclick = function() {
+        saifu += jihankiMoney
+        jihankiMoney -= jihankiMoney
+        displaySaifu.textContent = saifu
+        displayJihankiMoney.textContent = jihankiMoney
+        disabled()
       }
       // buyButtonTea を押した時の処理
     </script>
